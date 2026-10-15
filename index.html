@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>猫猫小摊 · 领取猫饼</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:#7a4b3a;background:#ffb8a8}
+#scene{position:fixed;inset:0;width:100%;height:100%}
+.tail{transform-box:fill-box;transform-origin:0% 100%;animation:wag 1.2s ease-in-out infinite alternate}
+@keyframes wag{to{transform:rotate(14deg)}}
+.blink{transform-box:fill-box;transform-origin:center;animation:bl 4s infinite}
+@keyframes bl{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.paw{transition:transform .5s}
+.give .paw{transform:translateY(-10px)}
+.cloud{animation:drift 40s linear infinite alternate}
+@keyframes drift{to{transform:translateX(40px)}}
+.bulb{animation:tw 1.6s ease-in-out infinite alternate}
+.bulb:nth-child(2n){animation-delay:.8s}
+@keyframes tw{from{opacity:.55}to{opacity:1}}
+#cookie{opacity:0;transform-box:fill-box;transform-origin:center}
+.give #cookie{animation:pop 1s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes pop{0%{opacity:0;transform:translateY(40px) scale(.2)}100%{opacity:1;transform:translateY(0) scale(1) rotate(-6deg)}}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:rgba(255,250,244,.88);backdrop-filter:blur(6px);border-radius:22px 22px 0 0;box-shadow:0 -4px 16px rgba(122,75,58,.15);text-align:center}
+#msg{font-size:14px;line-height:1.5;min-height:21px;margin-bottom:8px}
+#msg b{color:#ff6f91;font-size:16px}
+.btns{display:flex;gap:10px;justify-content:center}
+button{flex:1;max-width:220px;font-size:18px;padding:11px 0;border:none;border-radius:40px;background:#ff8fab;color:#fff;font-weight:bold;box-shadow:0 4px 0 #e0607f;cursor:pointer;font-family:inherit}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #e0607f}
+button:disabled{background:#c9b8bd;box-shadow:0 4px 0 #a99}
+#again{background:#8fd3b6;box-shadow:0 4px 0 #5fae8e;display:none}
+.conf{position:fixed;top:-20px;font-size:20px;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.6}}
+</style></head><body>
+<svg id="scene" viewBox="0 0 400 800" preserveAspectRatio="xMidYMax slice">
+<defs>
+ <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9b8ce0"/><stop offset=".45" stop-color="#ffaec4"/><stop offset=".75" stop-color="#ffd5a0"/></linearGradient>
+ <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8dc9a"/><stop offset="1" stop-color="#7fc28a"/></linearGradient>
+ <radialGradient id="glow"><stop offset="0" stop-color="#fff3b0" stop-opacity=".9"/><stop offset="1" stop-color="#fff3b0" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="400" height="800" fill="url(#sky)"/>
+<circle cx="300" cy="300" r="90" fill="url(#glow)"/><circle cx="300" cy="300" r="34" fill="#ffe08a"/>
+<g fill="#fff" opacity=".9"><circle cx="40" cy="80" r="1.5"/><circle cx="120" cy="40" r="1.2"/><circle cx="220" cy="90" r="1.5"/><circle cx="350" cy="60" r="1.3"/><circle cx="170" cy="150" r="1"/></g>
+<g class="cloud" fill="#fff" opacity=".85"><g><ellipse cx="80" cy="190" rx="40" ry="16"/><ellipse cx="100" cy="178" rx="24" ry="18"/><ellipse cx="62" cy="182" rx="18" ry="13"/></g><g><ellipse cx="260" cy="130" rx="34" ry="13"/><ellipse cx="276" cy="120" rx="20" ry="15"/></g></g>
+<!-- hills -->
+<path d="M0 400q100-60 200-10t200-20v140H0z" fill="#c9a7e0"/>
+<path d="M0 430q80-40 170 0t230-10v100H0z" fill="#b6c9ef" opacity=".8"/>
+<!-- houses -->
+<g>
+ <rect x="10" y="390" width="50" height="60" fill="#ffd9c0"/><path d="M5 392l30-28 30 28z" fill="#e78ca5"/><rect x="25" y="410" width="14" height="14" fill="#ffe89a"/>
+ <rect x="70" y="405" width="40" height="45" fill="#fff0d8"/><path d="M65 407l25-22 25 22z" fill="#9b8ce0"/><rect x="83" y="420" width="12" height="12" fill="#ffe89a"/>
+ <rect x="300" y="385" width="55" height="65" fill="#ffe2cf"/><path d="M294 388l33-30 33 30z" fill="#e78ca5"/><rect x="310" y="405" width="12" height="12" fill="#ffe89a"/><rect x="332" y="405" width="12" height="12" fill="#ffe89a"/><rect x="345" y="358" width="7" height="16" fill="#c98b6b"/>
+ <rect x="358" y="400" width="42" height="50" fill="#fff0d8"/><path d="M354 402l25-22 25 22z" fill="#8fd3b6"/>
+</g>
+<!-- trees -->
+<g><rect x="128" y="420" width="6" height="30" fill="#a0664a"/><circle cx="131" cy="410" r="20" fill="#8fd3b6"/><circle cx="122" cy="402" r="9" fill="#b0e6c8"/>
+<rect x="268" y="425" width="6" height="25" fill="#a0664a"/><circle cx="271" cy="416" r="16" fill="#7fc79f"/></g>
+<!-- ground -->
+<path d="M0 440q200-20 400 0v360H0z" fill="url(#grass)"/>
+<path d="M150 445q50-4 100 0l90 355H60z" fill="#f7dcb4"/>
+<g fill="#ffe9cc" opacity=".7"><ellipse cx="190" cy="520" rx="14" ry="5"/><ellipse cx="215" cy="600" rx="18" ry="6"/><ellipse cx="170" cy="700" rx="22" ry="7"/></g>
+<g stroke="#6fb07c" stroke-width="2.5" stroke-linecap="round" fill="none"><path d="M30 520l-4-10M34 520l2-12M38 520l5-9"/><path d="M350 560l-4-10M354 560l2-12M358 560l5-9"/><path d="M60 700l-4-10M64 700l2-12M68 700l5-9"/><path d="M330 720l-4-10M334 720l2-12"/></g>
+<g><circle cx="45" cy="600" r="5" fill="#ff9eb8"/><circle cx="45" cy="600" r="2" fill="#ffe08a"/><circle cx="360" cy="640" r="5" fill="#fff"/><circle cx="360" cy="640" r="2" fill="#ffe08a"/><circle cx="90" cy="560" r="4" fill="#ffd36e"/></g>
+<!-- lamp posts + string lights -->
+<rect x="18" y="300" width="6" height="300" fill="#7a4b3a"/><rect x="376" y="300" width="6" height="300" fill="#7a4b3a"/>
+<path d="M21 305Q200 400 379 305" stroke="#7a4b3a" stroke-width="1.5" fill="none"/>
+<g><circle class="bulb" cx="50" cy="322" r="5" fill="#ffe08a"/><circle class="bulb" cx="85" cy="338" r="5" fill="#ffb3c6"/><circle class="bulb" cx="120" cy="349" r="5" fill="#b8e0f0"/><circle class="bulb" cx="160" cy="356" r="5" fill="#ffe08a"/><circle class="bulb" cx="200" cy="358" r="5" fill="#ffb3c6"/><circle class="bulb" cx="240" cy="356" r="5" fill="#b8e0a0"/><circle class="bulb" cx="280" cy="349" r="5" fill="#ffe08a"/><circle class="bulb" cx="315" cy="338" r="5" fill="#ffb3c6"/><circle class="bulb" cx="350" cy="322" r="5" fill="#b8e0f0"/></g>
+<!-- lanterns -->
+<g><line x1="21" y1="300" x2="21" y2="310"/><ellipse cx="21" cy="322" rx="12" ry="14" fill="#ff8f8f"/><rect x="15" y="306" width="12" height="4" fill="#ffd36e"/>
+<ellipse cx="379" cy="322" rx="12" ry="14" fill="#ff8f8f"/><rect x="373" y="306" width="12" height="4" fill="#ffd36e"/></g>
+<!-- STALL -->
+<g transform="translate(50 375)">
+ <ellipse cx="150" cy="292" rx="150" ry="14" fill="#5a3527" opacity=".18"/>
+ <rect x="30" y="80" width="8" height="140" fill="#c98b6b"/><rect x="262" y="80" width="8" height="140" fill="#c98b6b"/>
+ <rect x="20" y="30" width="260" height="20" fill="#7a4b3a"/>
+ <path d="M20 50h260v30q-16 16-32 0q-16 16-33 0q-16 16-32 0q-16 16-33 0q-16 16-32 0q-16 16-33 0q-16 16-32 0q-16 16-33 0z" fill="#ff9eb8"/>
+ <path d="M52 50h33v30q-16 16-33 0zM117 50h33v30q-16 16-33 0zM183 50h32v30q-16 16-32 0zM248 50h32v30q-16 16-32 0z" fill="#fff"/>
+ <rect x="100" y="8" width="100" height="28" rx="14" fill="#ffd36e" stroke="#fff" stroke-width="3"/><text x="150" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#7a4b3a">猫猫小摊</text>
+ <path class="tail" d="M215 225q40-10 35-60q-2-12 8-10q12 40-35 82z" fill="#ffc98b"/>
+ <ellipse cx="150" cy="210" rx="58" ry="45" fill="#ffc98b"/>
+ <path d="M92 120l8-40 30 25zM208 120l-8-40-30 25z" fill="#ffc98b"/><path d="M102 112l4-22 15 14zM198 112l-4-22-15 14z" fill="#ffb3c6"/>
+ <ellipse cx="150" cy="140" rx="62" ry="50" fill="#ffc98b"/>
+ <path d="M135 95q15 10 30 0" stroke="#e8a060" stroke-width="5" fill="none" stroke-linecap="round"/>
+ <g class="blink"><ellipse cx="127" cy="138" rx="7" ry="9" fill="#5a3527"/><ellipse cx="173" cy="138" rx="7" ry="9" fill="#5a3527"/><circle cx="129" cy="134" r="2.5" fill="#fff"/><circle cx="175" cy="134" r="2.5" fill="#fff"/></g>
+ <ellipse cx="112" cy="155" rx="10" ry="6" fill="#ff9eb8" opacity=".7"/><ellipse cx="188" cy="155" rx="10" ry="6" fill="#ff9eb8" opacity=".7"/>
+ <path d="M146 150h8l-4 5z" fill="#ff7aa2"/><path d="M140 158q5 6 10 0q5 6 10 0" stroke="#5a3527" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+ <path d="M95 150h-22M95 158h-20M205 150h22M205 158h20" stroke="#c98b6b" stroke-width="2" stroke-linecap="round"/>
+ <path d="M115 180q35 18 70 0v14q-35 14-70 0z" fill="#fff"/>
+ <rect x="20" y="220" width="260" height="72" rx="10" fill="#ffe0a3"/><rect x="20" y="220" width="260" height="12" rx="6" fill="#f2c27a"/>
+ <rect x="30" y="240" width="240" height="44" rx="8" fill="#f9cf8a" opacity=".5"/>
+ <g class="paw"><ellipse cx="120" cy="222" rx="16" ry="11" fill="#ffc98b"/><ellipse cx="180" cy="222" rx="16" ry="11" fill="#ffc98b"/></g>
+ <g font-size="22"><text x="44" y="272">🍪</text><text x="234" y="272">🍡</text></g>
+ <text x="150" y="268" text-anchor="middle" font-size="14" fill="#a0664a">喵～欢迎光临</text>
+ <g transform="translate(112 150) scale(.8)"><g id="cookie"><path d="M18 40l4-30 22 18h12l22-18 4 30q8 12 6 26c-3 22-26 28-42 28S11 88 8 66q-2-14 10-26z" id="ckbody" fill="#f6c27b" stroke="#c98b4b" stroke-width="3"/><circle cx="36" cy="55" r="5" fill="#5a3527"/><circle cx="64" cy="55" r="5" fill="#5a3527"/><path d="M45 66q5 5 10 0" stroke="#5a3527" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="26" cy="68" r="5" fill="#ff9eb8" opacity=".7"/><circle cx="74" cy="68" r="5" fill="#ff9eb8" opacity=".7"/></g></g>
+</g>
+</svg>
+<div class="bar"><div id="msg">猫猫老板今天限定送猫饼，快来领一个吧～</div>
+<div class="btns"><button id="btn">领取猫饼 🍪</button><button id="again">再来一个 🔁</button></div></div>
+<script>
+const F=[["草莓味","#ffb3c6","酸酸甜甜，像恋爱的味道～"],["抹茶味","#b8e0a0","清新一口，烦恼通通不见！"],["奶油味","#fff0c8","软软绵绵，今天也要被温柔对待喵～"],["巧克力味","#c48a5e","浓浓甜甜，好运加倍！"],["芒果味","#ffd36e","阳光满满，元气一整天！"],["蓝莓味","#b9b6ff","眨眨眼，好梦就会来～"]];
+const s=document.getElementById('scene'),b=document.getElementById('btn'),a=document.getElementById('again'),m=document.getElementById('msg'),ck=document.getElementById('ckbody');
+let n=0;
+function claim(){const f=F[Math.random()*F.length|0];n++;s.classList.remove('give');void s.getBoundingClientRect();ck.setAttribute('fill',f[1]);s.classList.add('give');
+m.innerHTML=`🎉 领到 <b>${f[0]}猫饼</b>！${f[2]}`+(n>1?` <small>(第${n}个)</small>`:'');
+b.disabled=true;b.textContent='已领取 ✓';a.style.display='block';confetti();}
+function confetti(){const e=['✨','🌸','⭐','💖','🐾','🎀'];for(let i=0;i<30;i++){const d=document.createElement('div');d.className='conf';d.textContent=e[i%e.length];d.style.left=Math.random()*100+'vw';d.style.animationDuration=(1.8+Math.random()*2)+'s';d.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(d);setTimeout(()=>d.remove(),4500);}}
+b.onclick=claim;a.onclick=claim;
+if(location.hash=='#claimed')claim();
+</script></body></html>
