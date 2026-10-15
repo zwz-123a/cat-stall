@@ -62,6 +62,31 @@ button:disabled{background:#c9b8bd;box-shadow:0 4px 0 #a99}
 .happy #happy{opacity:1}.happy .blink{opacity:0}
 #mute{position:fixed;top:calc(10px + env(safe-area-inset-top));right:10px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,250,244,.85);font-size:20px;box-shadow:0 2px 6px rgba(122,75,58,.2);cursor:pointer;z-index:5;padding:0;flex:none}
 
+
+#bagBtn{position:fixed;top:calc(10px + env(safe-area-inset-top));left:10px;width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,250,244,.9);font-size:24px;box-shadow:0 2px 6px rgba(122,75,58,.2);cursor:pointer;z-index:5;padding:0;flex:none;will-change:transform}
+#bagBtn:active{transform:scale(.92);box-shadow:0 2px 6px rgba(122,75,58,.2)}
+#badge{position:absolute;top:-4px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#ff6f91;color:#fff;font-size:12px;font-weight:bold;line-height:20px;border:2px solid #fff;box-sizing:content-box}
+#badge:empty{display:none}
+.flyck svg{width:64px;height:64px;display:block}.flyck{position:fixed;left:0;top:0;width:64px;height:64px;z-index:6;pointer-events:none;will-change:transform,opacity}
+#bagBack{position:fixed;inset:0;background:rgba(90,53,39,.35);opacity:0;pointer-events:none;transition:opacity .3s;z-index:8}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:9;background:#fffaf4;border-radius:26px 26px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .38s cubic-bezier(.3,1.25,.5,1);will-change:transform;box-shadow:0 -6px 20px rgba(122,75,58,.2);max-height:80vh;overflow:auto}
+.bagOpen #bagBack{opacity:1;pointer-events:auto}.bagOpen #sheet{transform:none}
+#sheet h2{font-size:19px;color:#ff6f91;text-align:center;margin:2px 0 4px}
+#sheet .grab{width:44px;height:5px;border-radius:3px;background:#f0d6c8;margin:0 auto 8px}
+#prog{text-align:center;font-size:13px;margin-bottom:6px}
+#pbar{height:10px;border-radius:5px;background:#f6e3d6;overflow:hidden;margin:0 10px 12px}
+#pfill{height:100%;width:100%;background:linear-gradient(90deg,#ffb3c6,#ffd36e,#b8e0a0);transform-origin:left;transform:scaleX(0);transition:transform .5s ease}
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cell{background:#fff;border-radius:16px;padding:8px 4px 6px;text-align:center;box-shadow:0 3px 0 #ffe0e8;cursor:pointer;transition:transform .15s;font-size:13px;border:none;font-family:inherit;color:#7a4b3a}
+.cell:active{transform:scale(.94)}.cell svg{width:58px;height:58px;display:block;margin:0 auto 2px}
+.cell.sel{box-shadow:0 0 0 3px #ffb3c6,0 3px 0 #ffe0e8}
+.cell .cnt{display:inline-block;margin-left:2px;color:#ff6f91;font-weight:bold}
+.cell.lock{color:#b9a9a4;background:#f8f2ef;box-shadow:none}
+#tip{min-height:40px;margin:12px 4px 10px;padding:9px 12px;border-radius:14px;background:#fff0f4;font-size:13px;text-align:center;line-height:1.5}
+#closeBag{display:block;margin:0 auto;max-width:200px;width:60%;font-size:16px;padding:9px 0;background:#8fd3b6;box-shadow:0 4px 0 #5fae8e}
+@keyframes bagb{0%{transform:scale(1)}30%{transform:scale(1.28,.85)}55%{transform:scale(.9,1.12)}80%{transform:scale(1.05)}100%{transform:scale(1)}}
+#bagBtn.bump{animation:bagb .5s ease-out}
+.flown #cookie{opacity:0!important;transition:opacity .15s}
 </style></head><body>
 <svg id="scene" viewBox="0 0 400 800" preserveAspectRatio="xMidYMax slice">
 <defs>
@@ -135,6 +160,11 @@ button:disabled{background:#c9b8bd;box-shadow:0 4px 0 #a99}
  <g transform="translate(112 150) scale(.8)"><g id="cookie"><path d="M18 40l4-30 22 18h12l22-18 4 30q8 12 6 26c-3 22-26 28-42 28S11 88 8 66q-2-14 10-26z" id="ckbody" fill="#f6c27b" stroke="#c98b4b" stroke-width="3"/><circle cx="36" cy="55" r="5" fill="#5a3527"/><circle cx="64" cy="55" r="5" fill="#5a3527"/><path d="M45 66q5 5 10 0" stroke="#5a3527" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="26" cy="68" r="5" fill="#ff9eb8" opacity=".7"/><circle cx="74" cy="68" r="5" fill="#ff9eb8" opacity=".7"/></g></g>
 </g>
 </svg>
+<button id="bagBtn" aria-label="猫饼背包">🎒<span id="badge"></span></button>
+<div id="bagBack"></div>
+<div id="sheet" role="dialog" aria-label="猫饼背包"><div class="grab"></div><h2>🎒 我的猫饼背包</h2>
+<div id="prog"></div><div id="pbar"><div id="pfill"></div></div><div id="grid"></div>
+<div id="tip">点一点猫饼，看看它的小秘密～</div><button id="closeBag">收起背包</button></div>
 <button id="mute" aria-label="静音">🔊</button>
 <div class="bar"><div id="msg">猫猫老板今天限定送猫饼，快来领一个吧～</div>
 <div class="btns"><button id="btn">领取猫饼 🍪</button><button id="again">再来一个 🔁</button></div></div>
@@ -171,6 +201,8 @@ const SFX={
     f.type='bandpass';f.Q.value=4;f.frequency.setValueAtTime(900,t);f.frequency.linearRampToValueAtTime(1900,t+.18);f.frequency.linearRampToValueAtTime(800,t+.5);
     g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(.22,t+.05);g.gain.setValueAtTime(.2,t+.3);g.gain.exponentialRampToValueAtTime(0.0001,t+.55);
     o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+.6);},
+  whoosh(){noise(.45,.05,'bandpass',1200,1.5);tone('sine',500,900,.3,.04);},
+  plop(){tone('sine',380,760,.12,.16);tone('sine',1200,1500,.15,.06,.09);},
   sparkle(){tone('sine',600,1400,.1,.1);for(let i=0;i<6;i++)tone('sine',2000+Math.random()*2500,0,.25,.035,.08+i*.09);}
 };
 muteBtn.onclick=()=>{muted=!muted;localStorage.setItem('catMute',muted?'1':'0');audio();updMute();if(!muted)SFX.blip();};
@@ -218,7 +250,7 @@ let n=0,busy=false;
 const say=x=>()=>{m.textContent=x;};
 const cls=(c,on=true)=>()=>s.classList.toggle(c,on);
 function make(f,freeze){busy=true;b.disabled=true;a.disabled=true;flavor=f;
-  s.classList.remove('give','happy','s-pour','s-close','s-sizzle','s-ding');void s.getBoundingClientRect();
+  s.classList.remove('flown','give','happy','s-pour','s-close','s-sizzle','s-ding');void s.getBoundingClientRect();
   $('batter').setAttribute('fill',f[1]);$('stream').setAttribute('stroke',f[1]);ck.setAttribute('fill',f[1]);
   EV=[[0,()=>{cls('s-pour')();say('🥄 猫猫正在倒面糊…')();SFX.pour();}],
       [1.2,()=>{cls('s-close')();say('🐾 盖上猫猫模具，压一压…')();}],[1.4,()=>SFX.clunk()],
@@ -228,11 +260,41 @@ function make(f,freeze){busy=true;b.disabled=true;a.disabled=true;flavor=f;
       [3.6,()=>give(f)],[3.9,()=>SFX.meow()],[5.4,cls('happy',false)]];
   KEYS=buildKeys(cur.slice());evIdx=0;lastNow=null;
   if(freeze!=null){freezeT=freeze;startT=0;}else{freezeT=null;startT=performance.now();}}
-function give(f){n++;s.classList.add('give');busy=false;
+function give(f){n++;s.classList.add('give');
   m.innerHTML=`🎉 领到 <b>${f[0]}猫饼</b>！${f[2]}`+(n>1?` <small>(第${n}个)</small>`:'');
-  b.disabled=true;b.textContent='已领取 ✓';a.disabled=false;a.style.display='block';confetti();}
+  b.disabled=true;b.textContent='已领取 ✓';a.disabled=true;a.style.display='block';confetti();if(freezeT!=null){busy=false;a.disabled=false;}else setTimeout(()=>flyToBag(f),1500);}
 function claim(){if(busy)return;audio();SFX.blip();make(F[Math.random()*F.length|0]);}
 function confetti(){SFX.sparkle();const e=['✨','🌸','⭐','💖','🐾','🎀'];for(let i=0;i<18;i++){const d=document.createElement('div');d.className='conf';d.textContent=e[i%e.length];d.style.left=Math.random()*100+'vw';d.style.animationDuration=(2+Math.random()*1.8)+'s';d.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(d);d.addEventListener('animationend',()=>d.remove());}}
+
+/* ---------- Backpack ---------- */
+const CK=(c,lock)=>`<svg viewBox="0 0 100 100"><path d="M18 40l4-30 22 18h12l22-18 4 30q8 12 6 26c-3 22-26 28-42 28S11 88 8 66q-2-14 10-26z" fill="${lock?'#e4d9d5':c}" stroke="${lock?'#cfc2bd':'#c98b4b'}" stroke-width="3"/>${lock?'<text x="50" y="70" text-anchor="middle" font-size="26" font-weight="bold" fill="#fff">?</text>':'<circle cx="36" cy="55" r="5" fill="#5a3527"/><circle cx="64" cy="55" r="5" fill="#5a3527"/><path d="M45 66q5 5 10 0" stroke="#5a3527" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="26" cy="68" r="5" fill="#ff9eb8" opacity=".7"/><circle cx="74" cy="68" r="5" fill="#ff9eb8" opacity=".7"/>'}</svg>`;
+let BAG=[];try{BAG=JSON.parse(localStorage.getItem('catBag')||'[]');if(!Array.isArray(BAG))BAG=[];}catch(e){BAG=[];}
+const bagBtn=$('bagBtn'),badge=$('badge');
+function counts(){const c=F.map(()=>0);BAG.forEach(x=>{if(c[x.f]!=null)c[x.f]++;});return c;}
+function fmt(ts){const d=new Date(ts),z=v=>String(v).padStart(2,'0');return `${d.getMonth()+1}月${d.getDate()}日 ${z(d.getHours())}:${z(d.getMinutes())}`;}
+function renderBag(){badge.textContent=BAG.length?(BAG.length>99?'99+':BAG.length):'';
+  const c=counts(),got=c.filter(x=>x>0).length;
+  $('prog').innerHTML=`已收集 <b style="color:#ff6f91">${got}/${F.length}</b> 种口味 · 共 <b style="color:#ff6f91">${BAG.length}</b> 块`+(got===F.length?' 🏆':'');
+  $('pfill').style.transform=`scaleX(${got/F.length})`;
+  $('grid').innerHTML=F.map((f,i)=>c[i]?`<button class="cell" data-i="${i}">${CK(f[1])}${f[0]}<span class="cnt">×${c[i]}</span></button>`:`<button class="cell lock" data-i="${i}">${CK(0,1)}???</button>`).join('');}
+$('grid').onclick=e=>{const el=e.target.closest('.cell');if(!el)return;audio();SFX.blip();const i=+el.dataset.i,c=counts();
+  document.querySelectorAll('.cell.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+  if(!c[i]){$('tip').textContent='还没遇到这种猫饼哦，多来小摊碰碰运气吧～';return;}
+  const last=BAG.filter(x=>x.f===i).pop();$('tip').innerHTML=`<b style="color:#ff6f91">${F[i][0]}猫饼</b> ×${c[i]}：${F[i][2]}<br><small>最近一次领取：${fmt(last.t)}</small>`;};
+function openBag(){audio();SFX.blip();renderBag();$('tip').textContent='点一点猫饼，看看它的小秘密～';document.body.classList.add('bagOpen');}
+function closeBag(){document.body.classList.remove('bagOpen');}
+bagBtn.onclick=openBag;$('closeBag').onclick=()=>{SFX.blip();closeBag();};$('bagBack').onclick=closeBag;
+function addToBag(f){const i=F.indexOf(f),before=counts().filter(x=>x>0).length;BAG.push({f:i,t:Date.now()});
+  try{localStorage.setItem('catBag',JSON.stringify(BAG));}catch(e){}
+  const after=counts().filter(x=>x>0).length;return {isNew:counts()[i]===1,complete:before<F.length&&after===F.length};}
+function flyToBag(f){const src=$('cookie').getBoundingClientRect(),dst=bagBtn.getBoundingClientRect(),el=document.createElement('div');
+  el.className='flyck';el.innerHTML=CK(f[1]);document.body.appendChild(el);s.classList.add('flown');SFX.whoosh();
+  const sx=src.left+src.width/2-32,sy=src.top+src.height/2-32,ex=dst.left+dst.width/2-32,ey=dst.top+dst.height/2-32,mx=(sx+ex)/2,my=Math.min(sy,ey)-60,sc=src.width/64;
+  const an=el.animate([{transform:`translate(${sx}px,${sy}px) scale(${sc}) rotate(-6deg)`,opacity:1},{transform:`translate(${mx}px,${my}px) scale(${sc*.8}) rotate(180deg)`,opacity:1,offset:.5},{transform:`translate(${ex}px,${ey}px) scale(.3) rotate(360deg)`,opacity:.3}],{duration:800,easing:'cubic-bezier(.45,0,.4,1)',fill:'forwards'});
+  an.onfinish=()=>{el.remove();busy=false;a.disabled=false;const r=addToBag(f);renderBag();bagBtn.classList.remove('bump');void bagBtn.offsetWidth;bagBtn.classList.add('bump');SFX.plop();
+    if(r.complete){setTimeout(()=>{m.innerHTML='🏆 <b>全部 6 种口味集齐啦！</b>你是猫猫小摊的头号粉丝～';SFX.ding();confetti();},350);}
+    else if(r.isNew){m.innerHTML+=' <small>✨新口味！</small>';}};}
+renderBag();
 b.onclick=claim;a.onclick=claim;
 const h=location.hash,FT={'#make1':.95,'#make2':1.45,'#make3':2.5,'#make4':3.3,'#make5':4.2};
 if(h=='#auto')make(F[Math.random()*F.length|0]);else if(h=='#claimed')make(F[5],6.5);else if(FT[h])make(F[0],FT[h]);
